@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-indigo-100 to-blue-200 min-h-screen">
+
+<!-- NAVBAR -->
+<nav class="bg-white shadow-md px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-indigo-600">My Login App</h1>
+    <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+        Logout
+    </button>
+</nav>
+
+<!-- CONTENT -->
+<div class="flex items-center justify-center mt-16 px-4">
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md text-center">
+
+        <!-- Avatar -->
+        <img id="avatar"
+            class="w-28 h-28 rounded-full mx-auto border-4 border-indigo-500 shadow mb-4"
+            src="https://via.placeholder.com/150" />
+
+        <!-- Name -->
+        <h2 id="name" class="text-2xl font-bold text-gray-800">Loading...</h2>
+
+        <!-- Email -->
+        <p id="email" class="text-gray-500 mt-1"></p>
+
+        <div class="my-6 border-t"></div>
+
+        <p class="text-green-600 font-semibold">Login berhasil 🎉</p>
+
+        <button onclick="logout()" 
+            class="mt-6 w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">
+            Logout
+        </button>
+
+    </div>
+</div>
+
+<script>
+async function loadUser() {
+    try {
+        const res = await fetch("http://localhost:8080/api/me");
+
+        if (!res.ok) throw new Error();
+
+        const user = await res.json();
+
+        document.getElementById("name").innerText = user.name;
+        document.getElementById("email").innerText = user.email;
+        document.getElementById("avatar").src = user.picture || "https://via.placeholder.com/150";
+
+    } catch {
+        alert("Belum login!");
+        window.location.href = "/";
+    }
+}
+
+async function logout() {
+    await fetch("http://localhost:8080/api/logout", {
+        method: "POST"
+    });
+    window.location.href = "/";
+}
+
+loadUser();
+</script>
+
+</body>
+</html>
