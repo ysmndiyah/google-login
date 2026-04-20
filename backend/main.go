@@ -1,4 +1,5 @@
 package main
+import "os"
 
 import (
 	"encoding/base64"
@@ -12,7 +13,7 @@ import (
 
 const (
 	clientID     = "433796767618-rmhkfr6iu7olfmt1q61umi8kogrgpnk3.apps.googleusercontent.com"
-	redirectURI  = "http://localhost:8080/"
+	redirectURI  = "https://google-login-production-4ce7.up.railway.app/"
 	appPort      = "8080"
 
 	googleTokenURL = "https://oauth2.googleapis.com/token"
@@ -148,5 +149,10 @@ func main() {
 	mux.Handle("/", http.FileServer(http.Dir("./")))
 
 	fmt.Println("Server jalan di http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", mux))
+	port := os.Getenv("PORT")
+if port == "" {
+    port = "8080"
+}
+
+log.Fatal(http.ListenAndServe(":"+port, mux))
 }
